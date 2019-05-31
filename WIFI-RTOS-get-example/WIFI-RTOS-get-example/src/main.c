@@ -18,6 +18,7 @@ static SOCKET tcp_client_socket = -1;
 
 /** Receive buffer definition. */
 static uint8_t gau8ReceivedBuffer[MAIN_WIFI_M2M_BUFFER_SIZE] = {0};
+	
 
 /** Wi-Fi status variable. */
 static bool gbConnectedWifi = false;
@@ -210,17 +211,16 @@ static void socket_cb(SOCKET sock, uint8_t u8Msg, void *pvMsg)
 			if (gbTcpConnection) {
 				memset(gau8ReceivedBuffer, 0, sizeof(gau8ReceivedBuffer));
 				sprintf((char *)gau8ReceivedBuffer, "%s", MAIN_PREFIX_BUFFER);
-				// MANDAR DADOS AQUI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 				tstrSocketConnectMsg *pstrConnect = (tstrSocketConnectMsg *)pvMsg;
 				if (pstrConnect && pstrConnect->s8Error >= SOCK_ERR_NO_ERROR) {
-          printf("send \n");
+					printf("send \n");
 					send(tcp_client_socket, gau8ReceivedBuffer, strlen((char *)gau8ReceivedBuffer), 0);
-					printf("chegou1");
-					memset(gau8ReceivedBuffer, 0, MAIN_WIFI_M2M_BUFFER_SIZE);
-					printf("chegou2");
-					recv(tcp_client_socket, &gau8ReceivedBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
-					printf("%s", &gau8ReceivedBuffer[0]);
+					// sprintf((char *)gau8ReceivedBuffer, "oieeeee");
+					// 
+					//sprintf((char *)gau8SendBuffer, "%s lalal", MAIN_PREFIX_BUFFER);
+					//send(tcp_client_socket,gau8SendBuffer,sizeof(gau8SendBuffer),0);
+					recvfrom(tcp_client_socket, &gau8ReceivedBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
 				} else {
 					printf("socket_cb: connect error!\r\n");
 					gbTcpConnection = false;
@@ -240,7 +240,7 @@ static void socket_cb(SOCKET sock, uint8_t u8Msg, void *pvMsg)
 
 			tstrSocketRecvMsg *pstrRecv = (tstrSocketRecvMsg *)pvMsg;
 			if (pstrRecv && pstrRecv->s16BufferSize > 0) {
-        printf(pstrRecv->pu8Buffer);
+				printf(pstrRecv->pu8Buffer);
 				
 				memset(gau8ReceivedBuffer, 0, sizeof(gau8ReceivedBuffer));
 				recv(tcp_client_socket, &gau8ReceivedBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
@@ -392,9 +392,9 @@ static void task_wifi(void *pvParameters) {
 				  close(tcp_client_socket);
 				  tcp_client_socket = -1;
 				  printf("error\n");
-				  }else{
+				}else{
 				  gbTcpConnection = true;
-				  //printf("Conectou! pegar dados aqui");
+				  
 			  }
 		  }
 	  }

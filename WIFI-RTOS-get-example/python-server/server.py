@@ -8,34 +8,40 @@ todos = {}
 
 dispositivos = {}
 
-class HelloWorld(Resource):
+class recebe(Resource):
 	def get(self):
-		print(request.remote_addr)
-		print(request.data)
-		print(request.args)
-		print(request.form)
-		print(request.files)
-		print(request.values)
-		# if (request.remote_addr) not in dispositivos:
-		# 	dispositivos[request.remote_addr] = {}
+		global analogico, digital
+		# analogico = request.args.get("Analogico")
+		digital = request.args.get("Digital")
+		digital = int(digital)
+		return "recebido"
 
-		# print(dispositivos)
-		return {'hello': 'world'}
+# class GG(Resource):
+# 	def get(self):
+# 		string = "<h1>{0}<h1>".format(digital)
+# 		return string
 
-	def put(self):
-		return {'hello': 'world'}
+# 	def post(self):
+# 		print(request.data)
+# 		return "oizinho"
 
-#class TodoSimple(Resource):
-#	def get(self, todo_id):
-#		return {todo_id: todos[todo_id]}
-#
-#	def put(self, todo_id):
-#		todos[todo_id] = request.form['data']
-#		return {todo_id: todos[todo_id]}
 
-#api.add_resource(TodoSimple, '/<string:todo_id>')
-api.add_resource(HelloWorld, '/')
 
+api.add_resource(recebe, '/')
+# api.add_resource(GG, '/Recebe')
+
+@app.route('/show')
+def show():
+   return '''
+	
+   <h1> {0} <h1>
+	
+   '''.format(digital)
+
+# @app.route('/python')
+
+# def hello_python():
+#    return 'Hello Python'
 if __name__ == '__main__':
 	app.run(host='0.0.0.0',debug=True)
 	#app.run(debug=True)
