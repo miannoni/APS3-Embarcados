@@ -11,9 +11,19 @@ dispositivos = {}
 class recebe(Resource):
 	def get(self):
 		global analogico, digital
-		# analogico = request.args.get("Analogico")
-		digital = request.args.get("Digital")
-		digital = int(digital)
+		if (request.args.get("Analogico")):
+			analogico = request.args.get("Analogico")
+			analogico = int(analogico)
+		else:
+			analogico = 0
+		if (request.args.get("Digital")):
+			digital = request.args.get("Digital")
+			digital = int(digital)
+		else:
+			digital = 0
+
+			
+		# print(request.time)
 		return "recebido"
 
 # class GG(Resource):
@@ -31,12 +41,14 @@ api.add_resource(recebe, '/')
 # api.add_resource(GG, '/Recebe')
 
 @app.route('/show')
+
 def show():
    return '''
 	
    <h1> {0} <h1>
+   <h1> {1} <h1>
 	
-   '''.format(digital)
+   '''.format(analogico, digital)
 
 # @app.route('/python')
 
